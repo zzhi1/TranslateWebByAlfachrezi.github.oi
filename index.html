@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3898/3898150.png" type="image/png">
+    <title>Smart Translator - Real-time Translation</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="background-overlay"></div>
+    
+    <!-- mode siang malal-->
+    <div class="theme-toggle">
+        <button id="themeToggle" class="theme-btn">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </div>
+
+    <!-- jam-->
+    <div class="clock-container">
+        <div id="clock" class="clock"></div>
+        <div id="date" class="date"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="title">🌐 Smart Translator</h1>
+            <p class="subtitle">Translate instantly as you type</p>
+        </header>
+
+        <main class="translator-container">
+            <div class="language-selector">
+                <div class="lang-group">
+                    <label for="fromLang">From:</label>
+                    <select id="fromLang" class="lang-select">
+                        <option value="auto">Auto Detect</option>
+                        <option value="en">English</option>
+                        <option value="id">Indonesian</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="ru">Russian</option>
+                        <option value="ja">Japanese</option>
+                        <option value="ko">Korean</option>
+                        <option value="zh">Chinese</option>
+                        <option value="ar">Arabic</option>
+                        <option value="hi">Hindi</option>
+                        <option value="th">Thai</option>
+                        <option value="vi">Vietnamese</option>
+                    </select>
+                </div>
+                
+                <button id="swapLang" class="swap-btn" title="Swap Languages">⇄</button>
+                
+                <div class="lang-group">
+                    <label for="toLang">To:</label>
+                    <select id="toLang" class="lang-select">
+                        <option value="id">Indonesian</option>
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="ru">Russian</option>
+                        <option value="ja">Japanese</option>
+                        <option value="ko">Korean</option>
+                        <option value="zh">Chinese</option>
+                        <option value="ar">Arabic</option>
+                        <option value="hi">Hindi</option>
+                        <option value="th">Thai</option>
+                        <option value="vi">Vietnamese</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="translation-area">
+                <div class="input-section">
+                    <div class="input-controls">
+                        <button id="micBtn" class="mic-btn" title="Voice Input">
+                            🎤
+                        </button>
+                        <button id="speakInputBtn" class="speak-btn" title="Listen to Input">
+                            🔊
+                        </button>
+                    </div>
+                    <textarea 
+                        id="inputText" 
+                        placeholder="Type here to translate instantly or use voice input..."
+                        class="text-input"
+                        maxlength="5000"
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="charCount">0</span>/5000
+                    </div>
+                </div>
+
+                <div class="output-section">
+                    <div class="output-controls">
+                        <button id="speakOutputBtn" class="speak-btn" title="Listen to Translation">
+                            🔊
+                        </button>
+                        <button id="copyBtn" class="copy-btn" title="Copy translation">
+                            📋
+                        </button>
+                    </div>
+                    <div id="outputText" class="text-output">
+                        <div class="placeholder">Translation will appear here...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <span>Real-time Translation</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🎤</span>
+                    <span>Voice Input</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🔊</span>
+                    <span>Text to Speech</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🌍</span>
+                    <span>15+ Languages</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🎨</span>
+                    <span>Day/Night Mode</span>
+                </div>
+            </div>
+        </main>
+
+        <footer class="about-section">
+            <div class="about-content">
+                <h3>💫 About the Creator</h3>
+                <p>DIBUAT OLEH ALFACHREZI MAULANA SEORANG SISWA SMK YG MEMULAI PROJECT MANDIRI</p>
+                <div class="creator-info">
+                    <span class="creator-name">Created by: ALFACHREZI MAULANA</span>
+                </div>
+                <div class="contact-info">
+                    <a href="/cdn-cgi/l/email-protection#4928252f282a213b2c332024283c25282728092e24282025672a2624" class="contact-link" title="Email">
+                        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail" class="contact-icon">
+                        <span class="__cf_email__" data-cfemail="f594999394969d87908f9c98948099949b94b59298949c99db969a98">[email&#160;protected]</span>
+                    </a>
+                    <a href="https://wa.me/6287837923161" class="contact-link" title="WhatsApp" target="_blank">
+                        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" class="contact-icon">
+                        +62 878-3792-3161
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module" src="./script.js"></script>
+</body>
+
+</html>
