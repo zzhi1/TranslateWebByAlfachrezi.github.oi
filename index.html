@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
+    <meta name="robots" content="notranslate">
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3898/3898150.png" type="image/png">
     <title>Smart Translator - Real-time Translation</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 
-<body>
+<body class="notranslate">
     <div class="background-overlay"></div>
     
     <!-- mode siang malal-->
@@ -93,8 +95,9 @@
                     <textarea 
                         id="inputText" 
                         placeholder="Type here to translate instantly or use voice input..."
-                        class="text-input"
+                        class="text-input notranslate"
                         maxlength="5000"
+                        translate="no"
                     ></textarea>
                     <div class="char-count">
                         <span id="charCount">0</span>/5000
@@ -110,7 +113,7 @@
                             📋
                         </button>
                     </div>
-                    <div id="outputText" class="text-output">
+                    <div id="outputText" class="text-output notranslate" translate="no">
                         <div class="placeholder">Translation will appear here...</div>
                     </div>
                 </div>

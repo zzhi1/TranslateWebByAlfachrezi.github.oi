@@ -1,4 +1,4 @@
-// Translation Web App JavaScript with Voice Features
+// Translation Web App JavaScript with Google Translate API Integration
 class TranslatorApp {
     constructor() {
         this.initializeElements();
@@ -9,6 +9,10 @@ class TranslatorApp {
         this.startClock();
         this.translationTimeout = null;
         this.isRecording = false;
+        
+        // Google Translate API configuration
+        this.googleTranslateApiKey = 'AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw'; // Free tier key
+        this.googleTranslateEndpoint = 'https://translation.googleapis.com/language/translate/v2';
     }
 
     initializeElements() {
@@ -163,36 +167,66 @@ class TranslatorApp {
         try {
             let fromLang = this.fromLang.value;
             
-            // If auto-detect is selected, detect the language first
+            // If auto-detect is selected, detect the language first using Google Translate
             if (fromLang === 'auto') {
-                fromLang = await this.detectLanguage(text);
+                fromLang = await this.detectLanguageWithGoogle(text);
             }
             
-            const translation = await this.performTranslation(text, fromLang, this.toLang.value);
+            const translation = await this.performGoogleTranslation(text, fromLang, this.toLang.value);
             this.outputText.textContent = translation;
         } catch (error) {
-            console.error('Translation error:', error);
-            this.outputText.innerHTML = '<div style="color: #e53e3e;">Translation failed. Please try again.</div>';
+            console.error('Google Translate error:', error);
+            this.outputText.innerHTML = '<div style="color: #e53e3e;">Google Translate service unavailable. Please check your internet connection and try again.</div>';
         }
     }
 
-    async detectLanguage(text) {
+    async detectLanguageWithGoogle(text) {
         try {
-            // Use Google Translate's detect API through a proxy service
-            const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=auto|en`);
+            // Use Google Translate Detect API
+            const response = await fetch(`${this.googleTranslateEndpoint}/detect?key=${this.googleTranslateApiKey}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    q: text
+                })
+            });
+            
             const data = await response.json();
             
-            if (data.responseStatus === 200 && data.matches && data.matches.length > 0) {
-                // Extract detected language from the response
-                const detectedLang = data.matches[0].source || 'en';
-                return detectedLang;
+            if (data.data && data.data.detections && data.data.detections.length > 0) {
+                return data.data.detections[0][0].language;
             }
         } catch (error) {
-            console.log('Language detection failed, using simple detection');
+            console.log('Google language detection failed, using simple detection');
         }
         
-        // Fallback: Simple language detection based on character patterns
+        // Fallback to simple detection only if Google API fails
         return this.simpleLanguageDetection(text);
+    }
+
+    async performGoogleTranslation(text, fromLang, toLang) {
+        const response = await fetch(`${this.googleTranslateEndpoint}?key=${this.googleTranslateApiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                q: text,
+                source: fromLang === 'auto' ? undefined : fromLang,
+                target: toLang,
+                format: 'text'
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.data && data.data.translations && data.data.translations.length > 0) {
+            return data.data.translations[0].translatedText;
+        } else {
+            throw new Error('No translation returned from Google Translate');
+        }
     }
 
     simpleLanguageDetection(text) {
@@ -250,83 +284,6 @@ class TranslatorApp {
         return detectedLang;
     }
 
-    async performTranslation(text, fromLang, toLang) {
-        // Using MyMemory Translation API (free service)
-        try {
-            const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${fromLang}|${toLang}`);
-            const data = await response.json();
-            
-            if (data.responseStatus === 200) {
-                return data.responseData.translatedText;
-            } else {
-                throw new Error('Translation service error');
-            }
-        } catch (error) {
-            // Fallback to basic dictionary for common words
-            return this.fallbackTranslation(text, fromLang, toLang);
-        }
-    }
-
-    fallbackTranslation(text, fromLang, toLang) {
-        // Basic fallback dictionary for common words
-        const dictionary = {
-            'en-id': {
-                'hello': 'halo',
-                'goodbye': 'selamat tinggal',
-                'thank you': 'terima kasih',
-                'please': 'tolong',
-                'yes': 'ya',
-                'no': 'tidak',
-                'good morning': 'selamat pagi',
-                'good afternoon': 'selamat siang',
-                'good evening': 'selamat sore',
-                'good night': 'selamat malam',
-                'how are you': 'apa kabar',
-                'i love you': 'aku cinta kamu',
-                'water': 'air',
-                'food': 'makanan',
-                'house': 'rumah',
-                'car': 'mobil',
-                'book': 'buku',
-                'computer': 'komputer',
-                'phone': 'telepon',
-                'money': 'uang'
-            },
-            'id-en': {
-                'halo': 'hello',
-                'selamat tinggal': 'goodbye',
-                'terima kasih': 'thank you',
-                'tolong': 'please',
-                'ya': 'yes',
-                'tidak': 'no',
-                'selamat pagi': 'good morning',
-                'selamat siang': 'good afternoon',
-                'selamat sore': 'good evening',
-                'selamat malam': 'good night',
-                'apa kabar': 'how are you',
-                'aku cinta kamu': 'i love you',
-                'air': 'water',
-                'makanan': 'food',
-                'rumah': 'house',
-                'mobil': 'car',
-                'buku': 'book',
-                'komputer': 'computer',
-                'telepon': 'phone',
-                'uang': 'money'
-            }
-        };
-
-        const langPair = `${fromLang}-${toLang}`;
-        const lowerText = text.toLowerCase();
-        
-        if (dictionary[langPair] && dictionary[langPair][lowerText]) {
-            return dictionary[langPair][lowerText];
-        }
-        
-        // If no translation found, return a helpful message
-        return `Translation not available. Try using simpler words or check your internet connection.`;
-    }
-
     toggleVoiceRecording() {
         if (!this.recognition) {
             alert('Voice recognition is not supported in your browser.');
@@ -366,7 +323,7 @@ class TranslatorApp {
             return;
         }
 
-        if (!text || text === 'Translation will appear here...' || text.includes('Translation not available')) {
+        if (!text || text === 'Translation will appear here...' || text.includes('Google Translate service unavailable')) {
             return;
         }
 
@@ -433,7 +390,7 @@ class TranslatorApp {
     async copyTranslation() {
         const text = this.outputText.textContent;
         
-        if (text && text !== 'Translation will appear here...' && !text.includes('Translation not available')) {
+        if (text && text !== 'Translation will appear here...' && !text.includes('Google Translate service unavailable')) {
             try {
                 await navigator.clipboard.writeText(text);
                 
